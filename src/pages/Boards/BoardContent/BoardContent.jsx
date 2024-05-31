@@ -97,7 +97,7 @@ function BoardContent({ board }) {
       setOrderedColumns(prevColumns => {
         // Tìm vị trí (index) của cái overCard trong column đích (nơi activeCard sắp được thả)
         const overCardIndex = overColumn?.cards?.findIndex(card => card._id === overCardId)
-        console.log('overCardIndex', overCardIndex)
+        // console.log('overCardIndex', overCardIndex)
 
         // Logic tính toán cho cardIndex mới lấy ra từ storybook của dnd-kit
         let newCardIndex
@@ -129,7 +129,7 @@ function BoardContent({ board }) {
           // Cập nhật lại mảng cardOrderIds cho chuẩn dữ liệu
           nextOverColumn.cardOrderIds = nextOverColumn.cards.map(card => card._id)
         }
-        console.log('nextColums', nextColumns)
+        // console.log('nextColums', nextColumns)
 
         return nextColumns
       })
@@ -139,10 +139,10 @@ function BoardContent({ board }) {
 
   //Trigger khi kết thúc kéo phần tử (drop)
   const handleDragEnd = (event) => {
-    console.log('handleDragEnd', event)
+    // console.log('handleDragEnd', event)
 
     if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
-      console.log('Hành động kéo thả card - tạm thời không làm gì')
+      // console.log('Hành động kéo thả card - tạm thời không làm gì')
       return
     }
 
@@ -188,7 +188,11 @@ function BoardContent({ board }) {
       onDragEnd={handleDragEnd}
       onDragOver={handleDragOver}
       onDragStart={handleDragStart}
+      // Cảm biến: Xem lại video 30
       sensors={sensors}
+      // Thuật toán phát hiện va chạm (nếu không có thì card với cover lớn sẽ không kéo qua Column khác được
+      // vì lúc này nó đang bị conflict giữa card và column, chúng ta sẽ dùng closestCorners thay vì closestCenter )
+      // https://docs.dndkit.com/api-documentation/context-provider/collision-detection-algorithms
       collisionDetection={closestCorners}
     >
       <Box
