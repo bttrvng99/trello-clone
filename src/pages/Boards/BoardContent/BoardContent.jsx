@@ -118,8 +118,8 @@ function BoardContent({ board }) {
   // Trigger khi bắt đầu kéo 1 phần tử (drag)
   const handleDragStart = (event) => {
     // console.log('handleDragStart', event)
-    setActiveDragItemData(event?.active?.id)
-    setActiveDragItemType(event?.active?.data?.current.columnId ? ACTIVE_DRAG_ITEM_TYPE.CARD :
+    setActiveDragItemId(event?.active?.id)
+    setActiveDragItemType(event?.active?.data?.current?.columnId ? ACTIVE_DRAG_ITEM_TYPE.CARD :
       ACTIVE_DRAG_ITEM_TYPE.COLUMN)
     setActiveDragItemData(event?.active?.data?.current)
 
