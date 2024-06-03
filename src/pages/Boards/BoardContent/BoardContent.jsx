@@ -11,9 +11,9 @@ import
   DragOverlay,
   defaultDropAnimationSideEffects,
   closestCorners,
-  closestCenter,
+  // closestCenter,
   pointerWithin,
-  rectIntersection,
+  // rectIntersection,
   getFirstCollision
 } from '@dnd-kit/core'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -291,21 +291,31 @@ function BoardContent({ board }) {
       return closestCorners({ ...args })
     }
 
+    // Tìm các điểm giao nhau, va chạm, trả về một mảng các va chạm - intersections với con trỏ
     const pointerIntersections = pointerWithin(args)
-    const intersections = !!pointerIntersections?.length
-      ? pointerIntersections
-      : rectIntersection(args)
+    // console.log('pointerIntersections: ', pointerIntersections)
 
-    let overId = getFirstCollision(intersections, 'id')
+    // Video 37.1: Nếu pointerIntersections là mảng rỗng, return luôn không làm gì
+    // Fix triệt để bug flickering của thư viện Dnd-kit trong trường hợp sau:
+    // - Kéo 1 card có image cover lên và kéo lên phía trên cùng ra khỏi khu vực kéo thả
+    if (!pointerIntersections?.length) return
+
+    // // Thuật toán phát hiện va chạm sẽ trả về một mảng các va chạm ở đáy (Không cần bước này nữa)
+    // const intersections = !!pointerIntersections?.length
+    //   ? pointerIntersections
+    //   : rectIntersection(args)
+
+    // Tìm overId đầu tiên trong các pointerIntersections ở trên
+    let overId = getFirstCollision(pointerIntersections, 'id')
     if (overId) {
       // Video 37: Fix flickering
       // Nếu over là column thì sẽ tìm tới cardId gần nhất bên trong khu vực va chạm đó dựa vào
       // thuật toán phát hiện va chạm closestCenter hoặc closestCorners đều được. Tuy nhiên ở đây dùng
-      // closestCenter trông mượt mà hơn
+      // closestCorners trông mượt mà hơn
       const colludingColumn = orderedColumns.find(column => column._id === overId)
       if (colludingColumn) {
         // console.log('overId Before: ', overId)
-        overId = closestCenter({
+        overId = closestCorners({
           ...args,
           droppableContainers: args.droppableContainers.filter(container => {
             return (container.id !== overId) && (colludingColumn?.cardOrderIds?.includes(container.id))
@@ -319,7 +329,7 @@ function BoardContent({ board }) {
     }
 
     return lastOverId.current ? [{ id: lastOverId.current }] : []
-  }, [activeDragItemType])
+  }, [activeDragItemType, orderedColumns])
 
   return (
     <DndContext
