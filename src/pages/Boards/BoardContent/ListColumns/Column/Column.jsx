@@ -23,6 +23,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import { mapOrder } from '~/utils/sorts'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { toast } from 'react-toastify'
 
 function Column({ column }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -58,6 +59,7 @@ function Column({ column }) {
   const addNewCard = () => {
     if (!newCardTitle) {
       // console.error('Please enter column title!')
+      toast.error('Please enter card title!', { position: 'bottom-right' })
       return
     }
     // console.log(newCardTitle)
