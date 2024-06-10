@@ -8,8 +8,21 @@ import { API_ROOT } from '~/utils/constants'
  * (Interceptors là cách đánh chặn vào giữa request hoặc response để xử lý logic theo mong muốn)
  */
 
+// Board
 export const fetchBoardDetailsAPI = async (boardId) => {
   const response = await axios.get(`${API_ROOT}/v1/boards/${boardId}`)
   // Axios trả về kết quả qua property data
+  return response.data
+}
+
+// Column
+export const createNewColumnAPI = async (data) => {
+  const response = await axios.post(`${API_ROOT}/v1/columns`, data)
+  return response.data
+}
+
+// Card
+export const createNewCardAPI = async (data) => {
+  const response = await axios.post(`${API_ROOT}/v1/cards`, data)
   return response.data
 }

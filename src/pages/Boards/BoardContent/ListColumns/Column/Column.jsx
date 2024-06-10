@@ -25,7 +25,7 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { toast } from 'react-toastify'
 
-function Column({ column }) {
+function Column({ column, createNewCard }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id,
     data: { ...column }
@@ -56,14 +56,21 @@ function Column({ column }) {
 
   const toggleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
 
-  const addNewCard = () => {
+  const addNewCard = async () => {
     if (!newCardTitle) {
-      // console.error('Please enter column title!')
+
       toast.error('Please enter card title!', { position: 'bottom-right' })
       return
     }
-    // console.log(newCardTitle)
+
     // Gọi API ở đây...
+    const newCardData = {
+      title: newCardTitle,
+      columnId: column._id
+    }
+
+    await createNewCard(newCardData)
+
     toggleOpenNewCardForm()
     setNewCardTitle('')
   }
